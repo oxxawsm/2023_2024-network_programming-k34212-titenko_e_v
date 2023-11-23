@@ -1,1 +1,43 @@
+---
+- name: lab2
+  hosts: CHR1:CHR2
+  gather_facts: false
+  become: true
 
+  tasks:
+          - name: set login and password
+            community.routeros.command:
+                    commands: "user add name=lena password=admin group=full"
+
+          - name: set ntp client
+            community.routeros.command:
+                    commands: "system ntp client set enabled=yes servers: 8.8.8.8"
+
+          - name: set ospf with routerID
+            community.routeros.command:
+                    commands:
+                            - /interface bridge add name=Loopback
+                            - /ip address add address={{ router_id }}/32 interface=Loopback
+                            - /routing ospf instance add name=v2inst version=2 router-id={{ router_id }}
+                            - /routing ospf area add name=backbone_v2 area-id=0.0.0.0 instance=v2inst
+                            - /routing ospf interface-template add network=0.0.0.0/0 area=backbone_v2
+
+          - name: gather ospf topology data
+            community.routeros.command:
+                    commands:
+                            - "/routing ospf neighbor print"
+            register: ospf_data
+
+          - name: gather full device config
+            community.routeros.facts:
+                    gather_subset:
+                            - config
+            register: config_data
+
+          - name: display ospf data
+            debug:
+                    var: ospf_data.stdout_lines
+
+          - name: display device config
+            debug:
+                    var: config_data.stdout_lines
