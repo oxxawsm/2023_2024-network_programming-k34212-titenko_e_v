@@ -90,8 +90,7 @@ Date of finished: 29.11.2023
 - Файл netbox отредактирован так:
 
   ![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/7615fb3c-330f-4c4e-8c08-16126a5e9112)
-
-
+  
 - Удаление дефолтной конфигурации: `sudo rm /etc/nginx/sites-enabled/default`
 - Перезагрузка nginx: `sudo systemctl restart nginx`
 
@@ -135,3 +134,20 @@ Playbook успешно выполнился, на роутерах появил
 
 ![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/6d0dd8be-6fb7-4e21-a013-8e5cde22c46f)
 
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/60390adf-cabd-4545-bdcf-7ca48068fc98)
+
+Далее по заданию нужно получить серийный номер устройства и внести эту информацию в Netbox. Но для вирутальных устройств серийный номер не выдается, поэтому были выбраны сведения об архитектуре устройства для занесения новой информации - необходимо получать эти данные, и потом передавать значение в переменной в кастомное поле в конфигурации роутера в netbox. 
+Для этого написан playbook:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/ed60f0ea-a616-4329-9625-e0473d0fffb2)
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/d5eee77f-2d61-4ef5-989f-79d23eed88ca)
+
+Операция выполнена успешно - в логах есть сообщения об обновлении:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/8ef2c7c8-b128-4bee-8389-382bb0a8ea6e)
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/99006e17-f69e-4c3a-9e6e-283716fca83b)
+
+## Вывод
+В ходе лабораторной работы с помощью Ansible и Netbox собрана вся возможная информация об устройствах. Было выяснено на практике, что netbox довольно удобный инструмент для документирования сетей.
