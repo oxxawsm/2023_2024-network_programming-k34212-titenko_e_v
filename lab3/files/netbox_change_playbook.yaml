@@ -1,0 +1,25 @@
+---
+- name: Get routers info and put into Netbox
+  hosts: device_roles_router
+  gather_facts: false
+  vars:
+          - ansible_network_os: community.routeros.routeros
+          - ansible_connection: ansible.netcommon.network_cli
+          - ansible_user: admin
+          - ansible_ssh_pass: admin
+
+  tasks:
+          - name: Get info from router
+            community.routeros.facts:
+                    gather_subset:
+                            - config
+            register: information
+          - name: Add to Netbox
+            netbox.netbox.netbox_virtual_machine:
+                    netbox_url: http://84.201.140.219/
+                    netbox_token: 4edbcc99144cb1fa67e98e2a5155352deb80468e
+                    data:
+                            name: "{{ inventory_hostname }}"
+                            custom_fields:
+                                    ansible_net_arch: "{{ information.ansible_facts.ansible_net_arch }}"
+                    state: present
