@@ -87,3 +87,49 @@ Date of finished: 30.11.2023
 ![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/857c8688-b899-4dcf-a3dc-58a98eea41f8)
 
 ### basic tunnel
+
+В этом задании нужно добавить заголовок инкапсуляции *ipv4*.
+
+Топология следующая:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/37ff0d02-a38a-4aa0-96b1-2c2dc0ece95e)
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/c13ea3c7-efb0-4e1e-83de-488248db70e5)
+
+Здесь необходимо добавить проверку соответствия *etherType* и *myTunnel*. Если соответствие есть, то распаковываем *myTunnel*, если *ipv4* инкапсулирвоан в *myTunnel*, то распакавываем и его:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/714f0b28-8ff7-4c5c-ab7e-81fbde2c058b)
+
+Далее, если присутствует заголовок *myTunnel*, то обрабатываем пакеты согласно правилам, описанным в *myTunnel_exact*. Если заголовка *myTunnel* нет, но есть *ipv4*, то используем правила из *ipv4_lpm*.
+
+Здесь также добавляется действие *myTunnel_forward*, сипользующееся для пересылки - указываем порт направления пакета из правил.
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/d89689d8-94ff-4173-a68d-e48b34c3f795)
+
+В deparser происходит упаковка заголовка *myTunnel*:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/60cdc1d5-36da-4570-96a2-067602676ad7)
+
+Далее проверим связность.
+
+В mininet запущены терминалы h1 и h2:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/2f30ae0b-5b78-4ee8-9ab9-424b47557ddd)
+
+В h2 запущен получатель и с h1 отправлен пакет. Пакет дошёл
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/ad8345ed-6cb4-475b-b074-087f6087289e)
+
+Далее для проверки тоннеля запущен ещё один пакет с *myTunnel*. Пакет дошёл
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/504eaa14-8270-4c21-93dd-b01c8e7d50f5)
+
+Теперь с h1 запущен пакет, который должен прийти в h3 и через *myTunnel* прийти в h2:
+
+![image](https://github.com/oxxawsm/2023_2024-network_programming-k34212-titenko_e_v/assets/63160594/271ff115-1fed-45fe-894d-179db59270e8)
+
+Как видно, пакет дошёл до h2 - *ipv4* не сработал.
+
+## Вывод
+
+В ходе выполнения лабораторной работы были выполнены два ознакомительных задания для понимания работы языка p4 и настройки устройств в помощью него.
